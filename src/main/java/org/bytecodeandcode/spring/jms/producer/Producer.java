@@ -44,11 +44,11 @@ public class Producer /*implements CommandLineRunner*/ {
 		return RandomStringUtils.randomAlphabetic(5);
 	}
 
-	public void send(Person person) {
+	public void send(Person person, String requestType) {
 		logger.info("Pushing person {} to topic...", person);
 		
 		Map<String, Object> requestMap = new HashMap<>();
-		requestMap.put("REQUEST_TYPE", "person");
+		requestMap.put("REQUEST_TYPE", requestType);
 		this.template.convertAndSend(this.topic, person, requestMap);
 	}
 

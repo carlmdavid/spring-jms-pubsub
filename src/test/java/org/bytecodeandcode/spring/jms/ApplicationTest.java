@@ -4,6 +4,7 @@
 package org.bytecodeandcode.spring.jms;
 
 import static org.hamcrest.CoreMatchers.containsString;
+import static org.hamcrest.Matchers.not;
 import static org.junit.Assert.assertThat;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -37,10 +38,15 @@ public class ApplicationTest {
 		Person person = new Person();
 		person.setFirstName(getRandomChars());
 		person.setLastName(getRandomChars());
-		producer.send(person);
+		producer.send(person, "human");
 		
-		Thread.sleep(5000);
+		Thread.sleep(2000);
+		assertThat(outputCapture.toString(), not(containsString("Received:")));
+		
+		producer.send(person, "person");
+		Thread.sleep(2000);
 		assertThat(outputCapture.toString(), containsString("Received:"));
+		assertThat(outputCapture.toString(), containsString(person.getFirstName()));
 	}
 
 	private String getRandomChars() {
