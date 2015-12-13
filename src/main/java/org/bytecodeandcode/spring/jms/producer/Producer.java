@@ -1,5 +1,8 @@
 package org.bytecodeandcode.spring.jms.producer;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.jms.Topic;
 
 import org.apache.commons.lang3.RandomStringUtils;
@@ -7,7 +10,6 @@ import org.bytecodeandcode.spring.batch.persistence.domain.Person;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.CommandLineRunner;
 import org.springframework.jms.core.JmsMessagingTemplate;
 import org.springframework.stereotype.Component;
 
@@ -44,7 +46,10 @@ public class Producer /*implements CommandLineRunner*/ {
 
 	public void send(Person person) {
 		logger.info("Pushing person {} to topic...", person);
-		this.template.convertAndSend(this.topic, person);
+		
+		Map<String, Object> requestMap = new HashMap<>();
+		requestMap.put("REQUEST_TYPE", "person");
+		this.template.convertAndSend(this.topic, person, requestMap);
 	}
 
 }
