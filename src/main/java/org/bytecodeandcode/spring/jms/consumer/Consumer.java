@@ -12,7 +12,13 @@ public class Consumer {
 	
 	private static Logger logger = LoggerFactory.getLogger(Consumer.class);
 
-	@JmsListener(destination = Application.TOPIC_NAME, selector = " REQUEST_TYPE = 'person'")
+	@JmsListener(
+			destination = Application.TOPIC_NAME
+			, selector = "REQUEST_TYPE = 'person' AND PERSON_ID = 2"
+			, subscription = "test.subscriber"
+			, id = "client.test.id"
+			, containerFactory = "containerFactory"
+			)
 	public void receiveStatus(Person person) {
 		logger.info("Received: " + person);
 	}
