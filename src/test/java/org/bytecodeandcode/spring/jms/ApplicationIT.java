@@ -24,7 +24,7 @@ import org.springframework.test.context.junit4.SpringJUnit4ClassRunner;
  */
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringApplicationConfiguration(Application.class)
-public class ApplicationTest {
+public class ApplicationIT {
 
 	@Rule
 	public OutputCapture outputCapture = new OutputCapture();
@@ -38,13 +38,14 @@ public class ApplicationTest {
 		Person person = new Person();
 		person.setFirstName(getRandomChars());
 		person.setLastName(getRandomChars());
+		person.setPersonId(2l);
 		producer.send(person, "human");
 		
 		Thread.sleep(2000);
 		assertThat(outputCapture.toString(), not(containsString("Received:")));
 		
 		producer.send(person, "person");
-		Thread.sleep(2000);
+		Thread.sleep(5000);
 		assertThat(outputCapture.toString(), containsString("Received:"));
 		assertThat(outputCapture.toString(), containsString(person.getFirstName()));
 	}
